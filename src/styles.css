@@ -30,6 +30,9 @@
  */
 
 @theme inline {
+  --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --color-success: var(--success);
+  --color-debit: var(--debit);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -73,8 +76,10 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --radius: 0.5rem;
+  --success: oklch(0.55 0.13 155);
+  --debit: oklch(0.55 0.17 35);
+  --background: oklch(0.985 0.005 95);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -153,3 +158,8 @@
     color: var(--color-foreground);
   }
 }
+
+/* هوية كل شركة */
+[data-company="delta"] { --primary: oklch(0.45 0.09 200); --primary-foreground: oklch(0.98 0 0); --ring: oklch(0.6 0.09 200); --accent: oklch(0.94 0.03 200); --accent-foreground: oklch(0.3 0.06 200); }
+[data-company="yafa"] { --primary: oklch(0.55 0.14 55); --primary-foreground: oklch(0.99 0 0); --ring: oklch(0.7 0.13 55); --accent: oklch(0.95 0.04 70); --accent-foreground: oklch(0.38 0.09 55); }
+body { font-family: var(--font-sans); }
