@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useCompany } from "@/lib/company";
 import { demoSubmit, pharmacies } from "@/lib/demo-data";
 import { Card, Field, StatusBanner, btnCls, inputCls, type SubmitStatus } from "./states";
@@ -11,6 +11,8 @@ export function EntryForm({ kind, initialPharmacyId, onSubmit = demoSubmit }: {
   const list = pharmacies.filter((p) => p.companyId === companyId);
   const [status, setStatus] = useState<SubmitStatus>({ state: "idle" });
   const isInv = kind === "invoice";
+  const [entryDate, setEntryDate] = useState("");
+  useEffect(() => { setEntryDate(new Date().toISOString().slice(0, 10)); }, []);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,8 +47,11 @@ export function EntryForm({ kind, initialPharmacyId, onSubmit = demoSubmit }: {
         <Field label={isInv ? "صورة الفاتورة الأصلية أو الملف المصمم" : "صورة قسيمة السداد"} note="صورة أو PDF، مرجع فقط.">
           <input name="attachment" type="file" accept="image/*,application/pdf" className={inputCls} />
         </Field>
-        <Field label={isInv ? "التاريخ (مقترح)" : "التاريخ (حقل تنظيمي مقترح)"} note={isInv ? "قيد التأكيد: تاريخ الفاتورة أم تاريخ الإدخال؟" : "غير مؤكد بعد."}>
-          <input name="date" type="date" className={inputCls} />
+        <Field label={isInv ? "تاريخ المستند (تاريخ الفاتورة)" : "تاريخ المستند (تاريخ القسيمة)"}>
+          <input name="documentDate" type="date" required className={inputCls} />
+        </Field>
+        <Field label="تاريخ الإدخال" note="يُسجَّل تلقائياً.">
+          <input name="entryDate" type="date" value={entryDate} readOnly className={`${inputCls} bg-muted`} />
         </Field>
         {!isInv && <Field label="رقم القسيمة (اختياري)" note="ليس متطلباً مؤكداً."><input name="receiptNumber" className={inputCls} /></Field>}
         <StatusBanner status={status} />

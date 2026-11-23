@@ -8,10 +8,11 @@ const nav = [
   { to: "/invoices/new", label: "تسجيل فاتورة" },
   { to: "/payments/new", label: "تسجيل سداد" },
   { to: "/statement", label: "كشف الحساب" },
+  { to: "/settings", label: "الإعدادات" },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { company, companyId, setCompanyId } = useCompany();
+  const { company, companyId, setCompanyId, settings } = useCompany();
   return (
     <div data-company={companyId} className="min-h-screen bg-background text-foreground">
       <header className="border-b bg-card">
@@ -38,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 onClick={() => setCompanyId(id)}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${id === companyId ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
               >
-                {companies[id].name}
+                {settings[id].name || companies[id].name}
               </button>
             ))}
           </div>

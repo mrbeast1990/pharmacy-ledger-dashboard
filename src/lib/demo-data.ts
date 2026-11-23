@@ -68,12 +68,11 @@ export const ledger: LedgerEntry[] = [
 export const summaries: Record<CompanyId, CompanySummary> = {
   delta: { totalInvoiced: 18700, totalCollected: 14200, outstanding: 4500, commission: null },
   yafa: {
-    totalInvoiced: 12500, totalCollected: 6500, outstanding: 6000,
-    commission: { amount: 325, ruleLabel: "نسبة على المجبي — القاعدة قيد التأكيد (قيمة عرض)" },
+    totalInvoiced: 12500, totalCollected: 6500, outstanding: 6000, commission: null,
   },
 };
 
-export const fmt = (n: number) => n.toLocaleString("ar-EG") + " ₪";
+export const fmt = (n: number) => n.toLocaleString("ar-EG") + " د.ل";
 
 /** محاكاة الحفظ في نسخة العرض: لا نجاح وهمي، تفشل دائماً مع الحفاظ على المدخلات. */
 export function demoSubmit(): Promise<never> {
@@ -81,3 +80,14 @@ export function demoSubmit(): Promise<never> {
     setTimeout(() => reject(new Error("نسخة عرض: لا توجد خدمة حفظ متصلة بعد، لم يُحفظ شيء ولم يتغير أي رصيد.")), 900),
   );
 }
+
+export const COMMISSION_RATE = 0.05; // يافا: 5% من المحصّل (المسدد)
+/** عمولة يافا: 5% من مجموع السدادات ضمن الفترة [from, to] (تاريخ المستند). تُحسب عند الطلب فقط. */
+export function computeCommission(entries: LedgerEntry[], from?: string, to?: string) {
+  const collected = entries
+    .filter((e) => e.kind === "payment" && (!from || (e.date ?? "") >= from) && (!to || (e.date ?? "") <= to))
+    .reduce((a, e) => a + e.amount, 0);
+  return { collected, commission: Math.round(collected * COMMISSION_RATE * 100) / 100 };
+}
+
+export interface CompanySettings { name: string; address: string; phone: string; invoiceNotes: string; logoUrl: string | null }
