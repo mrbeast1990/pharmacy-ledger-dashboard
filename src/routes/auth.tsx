@@ -28,13 +28,15 @@ export const Route = createFileRoute("/auth")({
     }
     if (access === "unauthorized") {
       await supabase.auth.signOut();
-      throw redirect({
-        to: "/auth",
-        search: {
-          ...(search.redirect ? { redirect: search.redirect } : {}),
-          reason: "unauthorized",
-        },
-      });
+      if (search.reason !== "unauthorized") {
+        throw redirect({
+          to: "/auth",
+          search: {
+            ...(search.redirect ? { redirect: search.redirect } : {}),
+            reason: "unauthorized",
+          },
+        });
+      }
     }
   },
   head: () => ({

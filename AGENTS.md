@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep protected pages under `src/routes/_authenticated/` and the email/password page at `/auth`; owner checks go through `src/lib/auth-access.ts` and the existing `is_owner` RPC because direct `app_owner` reads are denied.
