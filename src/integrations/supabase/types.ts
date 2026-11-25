@@ -14,13 +14,409 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_owner: {
+        Row: {
+          singleton: boolean
+          user_id: string
+        }
+        Insert: {
+          singleton?: boolean
+          user_id: string
+        }
+        Update: {
+          singleton?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      attachments: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          mime_type: string
+          name: string
+          object_path: string
+          size_bytes: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id: string
+          mime_type: string
+          name: string
+          object_path: string
+          size_bytes: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          mime_type?: string
+          name?: string
+          object_path?: string
+          size_bytes?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attachments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string
+          after_data: Json | null
+          before_data: Json | null
+          company_id: string
+          id: number
+          occurred_at: string
+          record_id: string
+          table_name: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          after_data?: Json | null
+          before_data?: Json | null
+          company_id: string
+          id?: never
+          occurred_at?: string
+          record_id: string
+          table_name: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          company_id?: string
+          id?: never
+          occurred_at?: string
+          record_id?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
+      companies: {
+        Row: {
+          has_commission: boolean
+          id: string
+        }
+        Insert: {
+          has_commission: boolean
+          id: string
+        }
+        Update: {
+          has_commission?: boolean
+          id?: string
+        }
+        Relationships: []
+      }
+      company_settings: {
+        Row: {
+          address: string
+          company_id: string
+          invoice_notes: string
+          logo_id: string | null
+          name: string
+          phone: string
+          version: number
+        }
+        Insert: {
+          address?: string
+          company_id: string
+          invoice_notes?: string
+          logo_id?: string | null
+          name: string
+          phone?: string
+          version?: number
+        }
+        Update: {
+          address?: string
+          company_id?: string
+          invoice_notes?: string
+          logo_id?: string | null
+          name?: string
+          phone?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_settings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_settings_logo_id_company_id_fkey"
+            columns: ["logo_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "attachments"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount: number
+          attachment_id: string | null
+          company_id: string
+          created_at: string
+          deleted_at: string | null
+          deleted_by: string | null
+          document_date: string
+          id: string
+          is_deleted: boolean
+          notes: string
+          pharmacy_id: string
+          reference: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          amount: number
+          attachment_id?: string | null
+          company_id: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          document_date: string
+          id: string
+          is_deleted?: boolean
+          notes?: string
+          pharmacy_id: string
+          reference: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          amount?: number
+          attachment_id?: string | null
+          company_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          document_date?: string
+          id?: string
+          is_deleted?: boolean
+          notes?: string
+          pharmacy_id?: string
+          reference?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_attachment_id_company_id_fkey"
+            columns: ["attachment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "attachments"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "invoices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_pharmacy_id_company_id_fkey"
+            columns: ["pharmacy_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "invoices_pharmacy_id_company_id_fkey"
+            columns: ["pharmacy_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacy_balances"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          attachment_id: string | null
+          company_id: string
+          created_at: string
+          deleted_at: string | null
+          deleted_by: string | null
+          document_date: string
+          id: string
+          is_deleted: boolean
+          notes: string
+          pharmacy_id: string
+          reference: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          amount: number
+          attachment_id?: string | null
+          company_id: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          document_date: string
+          id: string
+          is_deleted?: boolean
+          notes?: string
+          pharmacy_id: string
+          reference?: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          amount?: number
+          attachment_id?: string | null
+          company_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          document_date?: string
+          id?: string
+          is_deleted?: boolean
+          notes?: string
+          pharmacy_id?: string
+          reference?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_attachment_id_company_id_fkey"
+            columns: ["attachment_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "attachments"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_pharmacy_id_company_id_fkey"
+            columns: ["pharmacy_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id", "company_id"]
+          },
+          {
+            foreignKeyName: "payments_pharmacy_id_company_id_fkey"
+            columns: ["pharmacy_id", "company_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacy_balances"
+            referencedColumns: ["id", "company_id"]
+          },
+        ]
+      }
+      pharmacies: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id: string
+          name: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      ledger_entries: {
+        Row: {
+          amount: number | null
+          attachment_id: string | null
+          company_id: string | null
+          created_at: string | null
+          document_date: string | null
+          id: string | null
+          kind: string | null
+          notes: string | null
+          pharmacy_id: string | null
+          reference: string | null
+          updated_at: string | null
+          version: number | null
+        }
+        Relationships: []
+      }
+      pharmacy_balances: {
+        Row: {
+          company_id: string | null
+          id: string | null
+          name: string | null
+          remaining: number | null
+          total_invoiced: number | null
+          total_paid: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      running_ledger: {
+        Row: {
+          amount: number | null
+          attachment_id: string | null
+          attachment_name: string | null
+          company_id: string | null
+          created_at: string | null
+          document_date: string | null
+          id: string | null
+          kind: string | null
+          notes: string | null
+          pharmacy_id: string | null
+          reference: string | null
+          running_balance: number | null
+          updated_at: string | null
+          version: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      calculate_commission: {
+        Args: { p_company: string; p_from: string; p_to: string }
+        Returns: Json
+      }
+      company_snapshot: { Args: { p_company: string }; Returns: Json }
+      is_owner: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
