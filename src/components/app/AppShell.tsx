@@ -1,7 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
 import { useCompany } from "@/lib/company";
 import { companies, type CompanyId } from "@/lib/demo-data";
+import { supabase } from "@/integrations/supabase/client";
 
 const nav = [
   { to: "/", label: "حسابات الصيدليات" },
@@ -13,6 +15,22 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { company, companyId, setCompanyId, settings } = useCompany();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    try {
+      await queryClient.cancelQueries();
+      queryClient.clear();
+      await supabase.auth.signOut();
+      await navigate({ to: "/auth", replace: true });
+    } finally {
+      setSigningOut(false);
+    }
+  }
+
   return (
     <div data-company={companyId} className="min-h-screen bg-background text-foreground">
       <header className="border-b bg-card">
@@ -30,18 +48,28 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="text-xl font-bold text-primary">{company.name}</div>
             </div>
           </div>
-          <div role="radiogroup" aria-label="اختيار الشركة" className="flex rounded-full border bg-muted p-1">
-            {(Object.keys(companies) as CompanyId[]).map((id) => (
-              <button
-                key={id}
-                role="radio"
-                aria-checked={id === companyId}
-                onClick={() => setCompanyId(id)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${id === companyId ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-              >
-                {settings[id].name || companies[id].name}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-3">
+            <div role="radiogroup" aria-label="اختيار الشركة" className="flex rounded-full border bg-muted p-1">
+              {(Object.keys(companies) as CompanyId[]).map((id) => (
+                <button
+                  key={id}
+                  role="radio"
+                  aria-checked={id === companyId}
+                  onClick={() => setCompanyId(id)}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${id === companyId ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                >
+                  {settings[id].name || companies[id].name}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              disabled={signingOut}
+              className="min-h-9 rounded-md border border-input px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-50"
+            >
+              {signingOut ? "جارٍ الخروج…" : "خروج"}
+            </button>
           </div>
         </div>
         <nav className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4">

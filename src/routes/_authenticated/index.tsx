@@ -4,12 +4,13 @@ import { useCompany } from "@/lib/company";
 import { demoSubmit, fmt, pharmacies } from "@/lib/demo-data";
 import { Card, EmptyState, StatusBanner, btnCls, inputCls, type SubmitStatus } from "@/components/app/states";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({ meta: [
     { title: "حسابات الصيدليات — دلتا الشمال ويافا" },
     { name: "description", content: "قائمة حسابات الصيدليات للشركة المختارة ورصيد كل حساب." },
     { property: "og:title", content: "حسابات الصيدليات" },
     { property: "og:description", content: "قائمة حسابات الصيدليات للشركة المختارة." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
   component: Pharmacies,
 });

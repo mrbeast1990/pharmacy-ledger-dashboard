@@ -3,10 +3,11 @@ import { useCompany } from "@/lib/company";
 import { fmt, ledger, pharmacies } from "@/lib/demo-data";
 import { Card, EmptyState, btnOutline } from "@/components/app/states";
 
-export const Route = createFileRoute("/invoices/$id")({
+export const Route = createFileRoute("/_authenticated/invoices/$id")({
   head: () => ({ meta: [
     { title: "تفاصيل الفاتورة والمرجع" }, { name: "description", content: "رقم الفاتورة واسم الصيدلية والقيمة والمرفق المرتبط." },
     { property: "og:title", content: "تفاصيل الفاتورة" }, { property: "og:description", content: "عرض الفاتورة ومرفقها المرجعي." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
   component: InvoiceDetail,
 });

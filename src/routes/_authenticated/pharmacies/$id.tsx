@@ -3,12 +3,13 @@ import { useCompany } from "@/lib/company";
 import { fmt, ledger, pharmacies } from "@/lib/demo-data";
 import { EmptyState, Stat, btnCls, btnOutline } from "@/components/app/states";
 
-export const Route = createFileRoute("/pharmacies/$id")({
+export const Route = createFileRoute("/_authenticated/pharmacies/$id")({
   head: () => ({ meta: [
     { title: "دفتر حساب الصيدلية" },
     { name: "description", content: "إجمالي المفوتر والسداد والمتبقي وحركات حساب الصيدلية." },
     { property: "og:title", content: "دفتر حساب الصيدلية" },
     { property: "og:description", content: "حركات الفواتير والسدادات لحساب الصيدلية." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
   component: Ledger,
 });

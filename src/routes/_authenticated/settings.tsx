@@ -4,7 +4,7 @@ import { useCompany } from "@/lib/company";
 import type { CompanySettings } from "@/lib/demo-data";
 import { Card, Field, btnCls, inputCls } from "@/components/app/states";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({ meta: [
     { title: "إعدادات الشركة" }, { name: "description", content: "شعار الشركة واسمها وعنوانها وهاتفها وملاحظات الفاتورة." },
     { property: "og:title", content: "إعدادات الشركة" }, { property: "og:description", content: "إعدادات منفصلة لكل شركة." },

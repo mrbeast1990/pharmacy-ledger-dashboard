@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EntryForm } from "@/components/app/EntryForm";
 
-export const Route = createFileRoute("/payments/new")({
+export const Route = createFileRoute("/_authenticated/payments/new")({
   validateSearch: (s: Record<string, unknown>): { pharmacy?: string } => (typeof s["pharmacy"] === "string" ? { pharmacy: s["pharmacy"] } : {}),
   head: () => ({ meta: [
     { title: "تسجيل سداد / جباية" }, { name: "description", content: "اختيار الصيدلية وقيمة السداد ورفع صورة القسيمة." },
     { property: "og:title", content: "تسجيل سداد / جباية" }, { property: "og:description", content: "نموذج تسجيل سداد لحساب صيدلية." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
   component: () => {
     const { pharmacy } = Route.useSearch();

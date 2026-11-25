@@ -4,10 +4,11 @@ import { useState } from "react";
 import { computeCommission, fmt, ledger, pharmacies, summaries } from "@/lib/demo-data";
 import { Card, EmptyState, Field, Stat, btnCls, inputCls } from "@/components/app/states";
 
-export const Route = createFileRoute("/statement")({
+export const Route = createFileRoute("/_authenticated/statement")({
   head: () => ({ meta: [
     { title: "كشف الحساب — ملخص الشركة" }, { name: "description", content: "المفوتر والمجبي والمتبقي للشركة المختارة وكشف كل صيدلية." },
     { property: "og:title", content: "كشف الحساب" }, { property: "og:description", content: "ملخص المفوتر والمجبي والمتبقي." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
   component: Statement,
 });

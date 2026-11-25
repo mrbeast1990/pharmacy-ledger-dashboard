@@ -9,82 +9,101 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as StatementRouteImport } from './routes/statement'
-import { Route as InvoicesIdRouteImport } from './routes/invoices/$id'
-import { Route as InvoicesNewRouteImport } from './routes/invoices/new'
-import { Route as PaymentsNewRouteImport } from './routes/payments/new'
-import { Route as PharmaciesIdRouteImport } from './routes/pharmacies/$id'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedStatementRouteImport } from './routes/_authenticated/statement'
+import { Route as AuthenticatedInvoicesIdRouteImport } from './routes/_authenticated/invoices/$id'
+import { Route as AuthenticatedInvoicesNewRouteImport } from './routes/_authenticated/invoices/new'
+import { Route as AuthenticatedPaymentsNewRouteImport } from './routes/_authenticated/payments/new'
+import { Route as AuthenticatedPharmaciesIdRouteImport } from './routes/_authenticated/pharmacies/$id'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const StatementRoute = StatementRouteImport.update({
+const AuthenticatedStatementRoute = AuthenticatedStatementRouteImport.update({
   id: '/statement',
   path: '/statement',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const InvoicesIdRoute = InvoicesIdRouteImport.update({
+const AuthenticatedInvoicesIdRoute = AuthenticatedInvoicesIdRouteImport.update({
   id: '/invoices/$id',
   path: '/invoices/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const InvoicesNewRoute = InvoicesNewRouteImport.update({
-  id: '/invoices/new',
-  path: '/invoices/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentsNewRoute = PaymentsNewRouteImport.update({
-  id: '/payments/new',
-  path: '/payments/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PharmaciesIdRoute = PharmaciesIdRouteImport.update({
-  id: '/pharmacies/$id',
-  path: '/pharmacies/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedInvoicesNewRoute =
+  AuthenticatedInvoicesNewRouteImport.update({
+    id: '/invoices/new',
+    path: '/invoices/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPaymentsNewRoute =
+  AuthenticatedPaymentsNewRouteImport.update({
+    id: '/payments/new',
+    path: '/payments/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPharmaciesIdRoute =
+  AuthenticatedPharmaciesIdRouteImport.update({
+    id: '/pharmacies/$id',
+    path: '/pharmacies/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
-  '/statement': typeof StatementRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/new': typeof InvoicesNewRoute
-  '/payments/new': typeof PaymentsNewRoute
-  '/pharmacies/$id': typeof PharmaciesIdRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/statement': typeof AuthenticatedStatementRoute
+  '/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/payments/new': typeof AuthenticatedPaymentsNewRoute
+  '/pharmacies/$id': typeof AuthenticatedPharmaciesIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
-  '/statement': typeof StatementRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/new': typeof InvoicesNewRoute
-  '/payments/new': typeof PaymentsNewRoute
-  '/pharmacies/$id': typeof PharmaciesIdRoute
+  '/auth': typeof AuthRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/statement': typeof AuthenticatedStatementRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/payments/new': typeof AuthenticatedPaymentsNewRoute
+  '/pharmacies/$id': typeof AuthenticatedPharmaciesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
-  '/statement': typeof StatementRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/new': typeof InvoicesNewRoute
-  '/payments/new': typeof PaymentsNewRoute
-  '/pharmacies/$id': typeof PharmaciesIdRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/statement': typeof AuthenticatedStatementRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/_authenticated/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/_authenticated/payments/new': typeof AuthenticatedPaymentsNewRoute
+  '/_authenticated/pharmacies/$id': typeof AuthenticatedPharmaciesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/settings'
     | '/statement'
     | '/invoices/$id'
@@ -93,96 +112,126 @@ export interface FileRouteTypes {
     | '/pharmacies/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/auth'
     | '/settings'
     | '/statement'
+    | '/'
     | '/invoices/$id'
     | '/invoices/new'
     | '/payments/new'
     | '/pharmacies/$id'
   id:
     | '__root__'
-    | '/'
-    | '/settings'
-    | '/statement'
-    | '/invoices/$id'
-    | '/invoices/new'
-    | '/payments/new'
-    | '/pharmacies/$id'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/settings'
+    | '/_authenticated/statement'
+    | '/_authenticated/'
+    | '/_authenticated/invoices/$id'
+    | '/_authenticated/invoices/new'
+    | '/_authenticated/payments/new'
+    | '/_authenticated/pharmacies/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SettingsRoute: typeof SettingsRoute
-  StatementRoute: typeof StatementRoute
-  InvoicesIdRoute: typeof InvoicesIdRoute
-  InvoicesNewRoute: typeof InvoicesNewRoute
-  PaymentsNewRoute: typeof PaymentsNewRoute
-  PharmaciesIdRoute: typeof PharmaciesIdRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/settings': {
-      id: '/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/statement': {
-      id: '/statement'
+    '/_authenticated/statement': {
+      id: '/_authenticated/statement'
       path: '/statement'
       fullPath: '/statement'
-      preLoaderRoute: typeof StatementRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedStatementRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/invoices/$id': {
-      id: '/invoices/$id'
+    '/_authenticated/invoices/$id': {
+      id: '/_authenticated/invoices/$id'
       path: '/invoices/$id'
       fullPath: '/invoices/$id'
-      preLoaderRoute: typeof InvoicesIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedInvoicesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/invoices/new': {
-      id: '/invoices/new'
+    '/_authenticated/invoices/new': {
+      id: '/_authenticated/invoices/new'
       path: '/invoices/new'
       fullPath: '/invoices/new'
-      preLoaderRoute: typeof InvoicesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedInvoicesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/payments/new': {
-      id: '/payments/new'
+    '/_authenticated/payments/new': {
+      id: '/_authenticated/payments/new'
       path: '/payments/new'
       fullPath: '/payments/new'
-      preLoaderRoute: typeof PaymentsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedPaymentsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/pharmacies/$id': {
-      id: '/pharmacies/$id'
+    '/_authenticated/pharmacies/$id': {
+      id: '/_authenticated/pharmacies/$id'
       path: '/pharmacies/$id'
       fullPath: '/pharmacies/$id'
-      preLoaderRoute: typeof PharmaciesIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedPharmaciesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedStatementRoute: typeof AuthenticatedStatementRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedInvoicesIdRoute: typeof AuthenticatedInvoicesIdRoute
+  AuthenticatedInvoicesNewRoute: typeof AuthenticatedInvoicesNewRoute
+  AuthenticatedPaymentsNewRoute: typeof AuthenticatedPaymentsNewRoute
+  AuthenticatedPharmaciesIdRoute: typeof AuthenticatedPharmaciesIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedStatementRoute: AuthenticatedStatementRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedInvoicesIdRoute: AuthenticatedInvoicesIdRoute,
+  AuthenticatedInvoicesNewRoute: AuthenticatedInvoicesNewRoute,
+  AuthenticatedPaymentsNewRoute: AuthenticatedPaymentsNewRoute,
+  AuthenticatedPharmaciesIdRoute: AuthenticatedPharmaciesIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SettingsRoute: SettingsRoute,
-  StatementRoute: StatementRoute,
-  InvoicesIdRoute: InvoicesIdRoute,
-  InvoicesNewRoute: InvoicesNewRoute,
-  PaymentsNewRoute: PaymentsNewRoute,
-  PharmaciesIdRoute: PharmaciesIdRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
