@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowDownLeft, ArrowRight, ArrowUpLeft, FilePlus2, Plus } from "lucide-react";
 import { useCompany } from "@/lib/company";
 import { fmt, ledger, pharmacies } from "@/lib/demo-data";
-import { EmptyState, Stat, btnCls, btnOutline } from "@/components/app/states";
+import { formatDate } from "@/lib/format";
+import { Card, EmptyState, Stat, btnCls, btnOutline } from "@/components/app/states";
 
 export const Route = createFileRoute("/_authenticated/pharmacies/$id")({
   head: () => ({ meta: [
-    { title: "دفتر حساب الصيدلية" },
+    { title: "دفتر حساب الصيدلية — دفتر دلتا ويافا" },
     { name: "description", content: "إجمالي المفوتر والسداد والمتبقي وحركات حساب الصيدلية." },
     { property: "og:title", content: "دفتر حساب الصيدلية" },
     { property: "og:description", content: "حركات الفواتير والسدادات لحساب الصيدلية." },
@@ -20,41 +22,58 @@ function Ledger() {
   const p = pharmacies.find((x) => x.id === id && x.companyId === companyId);
   if (!p) return <EmptyState title={`هذا الحساب غير موجود في ${company.name}`} hint="لكل شركة حساباتها المستقلة." action={<Link to="/" className={btnOutline}>العودة للحسابات</Link>} />;
   const rows = ledger.filter((e) => e.pharmacyId === p.id);
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div><h1 className="text-2xl font-bold">{p.name}</h1><p className="text-sm text-muted-foreground">حساب لدى {company.name}</p></div>
-        <div className="flex gap-2">
-          <Link to="/invoices/new" search={{ pharmacy: p.id }} className={btnCls}>+ فاتورة</Link>
-          <Link to="/payments/new" search={{ pharmacy: p.id }} className={btnOutline}>+ سداد</Link>
+      <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition hover:text-primary"><ArrowRight className="h-4 w-4" aria-hidden="true" />العودة إلى الحسابات</Link>
+      <Card className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-primary">دفتر الصيدلية</p>
+          <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">{p.name}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">حساب مستقل لدى {company.name}</p>
         </div>
-      </div>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/invoices/new" search={{ pharmacy: p.id }} className={btnCls}><Plus className="h-4 w-4" aria-hidden="true" />فاتورة</Link>
+          <Link to="/payments/new" search={{ pharmacy: p.id }} className={btnOutline}><Plus className="h-4 w-4" aria-hidden="true" />سداد</Link>
+        </div>
+      </Card>
+
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat label="إجمالي المفوتر" value={fmt(p.totalInvoiced)} tone="up" />
         <Stat label="إجمالي السداد" value={fmt(p.totalPaid)} tone="down" />
-        <Stat label="المتبقي" value={fmt(p.remaining)} />
+        <Stat label="المتبقي" value={fmt(p.remaining)} tone="main" />
       </div>
+
       {rows.length === 0 ? <EmptyState title="لا توجد حركات بعد" hint="سجّل فاتورة أو سداداً ليظهر هنا." /> : (
-        <div className="overflow-x-auto rounded-lg border bg-card">
-          <table className="w-full text-sm">
-            <thead className="bg-muted text-muted-foreground"><tr>
-              <th className="p-3 text-start">النوع</th><th className="p-3 text-start">المرجع</th><th className="p-3 text-start">المبلغ</th>
-              <th className="p-3 text-start">الأثر على الرصيد</th><th className="p-3 text-start">التاريخ*</th><th className="p-3 text-start">الرصيد المتتابع*</th></tr></thead>
-            <tbody>{rows.map((e) => {
-              const inv = e.kind === "invoice";
-              return (
-                <tr key={e.id} className="border-t">
-                  <td className="p-3"><span className={`rounded px-2 py-0.5 text-xs font-medium ${inv ? "bg-debit/10 text-debit" : "bg-success/10 text-success"}`}>{inv ? "فاتورة" : "سداد"}</span></td>
-                  <td className="p-3">{inv ? <Link to="/invoices/$id" params={{ id: e.id }} className="text-primary hover:underline">{e.reference}</Link> : e.reference}</td>
-                  <td className="p-3">{fmt(e.amount)}</td>
-                  <td className={`p-3 font-medium ${inv ? "text-debit" : "text-success"}`}>{inv ? "▲ يزيد المطلوب" : "▼ يخفض المطلوب"}</td>
-                  <td className="p-3 text-muted-foreground">{e.date ?? "—"}</td>
-                  <td className="p-3 text-muted-foreground">{e.runningBalance != null ? fmt(e.runningBalance) : "—"}</td>
-                </tr>);
-            })}</tbody>
-          </table>
-          <p className="border-t p-3 text-xs text-muted-foreground">* التاريخ والرصيد المتتابع تنظيم مقترح لم يُعتمد بعد.</p>
-        </div>
+        <Card className="overflow-hidden p-0">
+          <div className="border-b border-border/70 p-5 sm:px-6">
+            <h2 className="flex items-center gap-2 text-lg font-extrabold"><FilePlus2 className="h-5 w-5 text-primary" aria-hidden="true" />حركات الحساب</h2>
+            <p className="mt-1 text-xs text-muted-foreground">الفاتورة تزيد المطلوب، والسداد يخفضه.</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[880px] text-sm">
+              <thead className="bg-muted/70 text-xs text-muted-foreground"><tr>
+                <th className="p-4 text-start font-bold">النوع</th><th className="p-4 text-start font-bold">المرجع</th><th className="p-4 text-start font-bold">المبلغ</th>
+                <th className="p-4 text-start font-bold">الأثر على الرصيد</th><th className="p-4 text-start font-bold">التاريخ*</th><th className="p-4 text-start font-bold">الرصيد المتتابع*</th></tr></thead>
+              <tbody>{rows.map((e) => {
+                const inv = e.kind === "invoice";
+                return (
+                  <tr key={e.id} className="border-t border-border/70 transition hover:bg-muted/45">
+                    <td className="p-4"><span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-bold text-foreground">{inv ? "فاتورة" : "سداد"}</span></td>
+                    <td className="p-4 font-semibold">{inv ? <Link to="/invoices/$id" params={{ id: e.id }} className="text-primary underline-offset-4 hover:underline">{e.reference}</Link> : e.reference}</td>
+                    <td className="p-4 font-extrabold tabular-nums">{fmt(e.amount)}</td>
+                    <td className={`p-4 font-semibold ${inv ? "text-foreground" : "text-success"}`}>
+                      <span className="inline-flex items-center gap-1.5">{inv ? <ArrowUpLeft className="h-4 w-4" aria-hidden="true" /> : <ArrowDownLeft className="h-4 w-4" aria-hidden="true" />}{inv ? "يزيد المطلوب" : "يخفض المطلوب"}</span>
+                    </td>
+                    <td className="p-4 text-muted-foreground tabular-nums"><time>{formatDate(e.date)}</time></td>
+                    <td className="p-4 text-muted-foreground tabular-nums">{e.runningBalance != null ? fmt(e.runningBalance) : "—"}</td>
+                  </tr>
+                );
+              })}</tbody>
+            </table>
+          </div>
+          <p className="border-t border-border/70 p-4 text-xs leading-5 text-muted-foreground">* التاريخ والرصيد المتتابع تنظيم مقترح لم يُعتمد بعد.</p>
+        </Card>
       )}
     </div>
   );

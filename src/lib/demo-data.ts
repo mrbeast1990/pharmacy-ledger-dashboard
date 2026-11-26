@@ -8,7 +8,7 @@ export interface Company {
   id: CompanyId;
   name: string; // اسم الشركة
   hasCommission: boolean; // يافا فقط
-  logoUrl: string | null; // null = مكان محجوز إلى حين استلام الشعار
+  logoUrl: string | null; // null = إظهار الأحرف الأولى من اسم الشركة
 }
 
 export interface Pharmacy {
@@ -72,7 +72,7 @@ export const summaries: Record<CompanyId, CompanySummary> = {
   },
 };
 
-export const fmt = (n: number) => n.toLocaleString("ar-EG") + " د.ل";
+export const fmt = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 }) + " د.ل";
 
 /** محاكاة الحفظ في نسخة العرض: لا نجاح وهمي، تفشل دائماً مع الحفاظ على المدخلات. */
 export function demoSubmit(): Promise<never> {

@@ -1,4 +1,5 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { BookOpenText, LockKeyhole, LogIn, Mail } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { checkOwnerAccess } from "@/lib/auth-access";
@@ -41,9 +42,9 @@ export const Route = createFileRoute("/auth")({
   },
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — حسابات الصيدليات" },
+      { title: "تسجيل الدخول — دفتر دلتا ويافا" },
       { name: "description", content: "دخول المالك إلى حسابات صيدليات دلتا الشمال ويافا." },
-      { property: "og:title", content: "تسجيل الدخول — حسابات الصيدليات" },
+      { property: "og:title", content: "تسجيل الدخول — دفتر دلتا ويافا" },
       { property: "og:description", content: "الدخول بالبريد الإلكتروني وكلمة السر." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -94,57 +95,65 @@ function AuthPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10 text-foreground">
-      <section className="w-full max-w-md rounded-xl border bg-card p-6 shadow-sm sm:p-8" aria-labelledby="login-title">
-        <div className="mb-7 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg border-2 border-dashed border-primary/50 text-[10px] text-muted-foreground">
-            مكان الشعار
+    <main data-company="delta" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10 text-foreground">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-primary" />
+      <section className="w-full max-w-md rounded-2xl border border-border/70 bg-card p-6 shadow-card sm:p-9" aria-labelledby="login-title">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-card">
+            <BookOpenText className="h-7 w-7" aria-hidden="true" />
           </div>
-          <p className="text-sm text-muted-foreground">دلتا الشمال ويافا</p>
-          <h1 id="login-title" className="mt-1 text-2xl font-bold text-primary">حسابات الصيدليات</h1>
-          <p className="mt-2 text-sm text-muted-foreground">سجّل الدخول للمتابعة إلى الحسابات</p>
+          <h1 id="login-title" className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">دفتر دلتا ويافا</h1>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">سجّل الدخول للمتابعة إلى حسابات الصيدليات</p>
         </div>
 
         {error && (
-          <div role="alert" className="mb-5 rounded-md border border-destructive bg-destructive/10 px-4 py-3 text-center text-sm font-medium text-destructive">
+          <div role="alert" className="mb-5 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-center text-sm font-bold text-destructive">
             {error}
           </div>
         )}
 
         <form onSubmit={signIn} className="space-y-5">
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium">البريد الإلكتروني</span>
-            <input
-              type="email"
-              name="email"
-              autoComplete="email"
-              inputMode="email"
-              dir="ltr"
-              required
-              autoFocus
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className={`${inputCls} text-left`}
-              placeholder="name@example.com"
-            />
+          <label className="block space-y-2">
+            <span className="text-sm font-bold">البريد الإلكتروني</span>
+            <span className="relative block">
+              <input
+                type="email"
+                name="email"
+                autoComplete="email"
+                inputMode="email"
+                dir="ltr"
+                required
+                autoFocus
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className={`${inputCls} pl-10 text-left`}
+                placeholder="name@example.com"
+              />
+              <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            </span>
           </label>
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium">كلمة السر</span>
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              dir="ltr"
-              required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className={`${inputCls} text-left`}
-            />
+          <label className="block space-y-2">
+            <span className="text-sm font-bold">كلمة السر</span>
+            <span className="relative block">
+              <input
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                dir="ltr"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className={`${inputCls} pl-10 text-left`}
+              />
+              <LockKeyhole className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            </span>
           </label>
-          <button type="submit" disabled={pending} className={`${btnCls} min-h-11 w-full`}>
+          <button type="submit" disabled={pending} className={`${btnCls} min-h-12 w-full`}>
+            <LogIn className="h-4 w-4" aria-hidden="true" />
             {pending ? "جارٍ تسجيل الدخول…" : "تسجيل الدخول"}
           </button>
         </form>
+        <p className="mt-7 border-t border-border/70 pt-5 text-center text-xs text-muted-foreground">حسابات دلتا الشمال ويافا في دفتر واحد</p>
       </section>
     </main>
   );
